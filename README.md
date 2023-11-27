@@ -1,10 +1,10 @@
 # bookstore
 
 # #Getting Started
-- # Please start the application using pnpm start:
+- Please start the application using pnpm start:
 pnpm start
 
-# #The application allows:
+# The application allows:
 
 - Admins: Complete data manipulation.
 - Users: Sign up, log in, and purchase books.
@@ -40,7 +40,7 @@ pnpm start
 
 # Purchases for Users
 - POST to http://localhost:5000/api/purchases/buy
-  $ body
+- $ body
     {
     "bookId": 11,
     "quantity": 1
