@@ -6,6 +6,9 @@ export const buyBook = async(bodyParams)=>{
     try {
         let stockDetails = await dbmodels.Stocks.findOne({where:{book_id: parseInt(bodyParams.bookId)}});
         const stockQuantity = parseInt(stockDetails.quantity);
+        if(stockQuantity=== 0){
+            throw new Error("Book out of stock");
+        }
         const buyQuantity = parseInt(bodyParams.quantity);
         if(stockQuantity >= buyQuantity){
             let createData = {
