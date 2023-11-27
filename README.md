@@ -12,20 +12,20 @@ pnpm start
 # Sign Up
 - User
 - POST to http://localhost:5000/api/users/signUp
-- # body {
+- $ body {
         "userName": "john",
         "email": "john@mail.com",
         "password": "New123"
     }
 - POST to http://localhost:5000/api/users/logIn
 - ADMIN
-- # body
+- $ body
     {
         "password": "Power123",
         "email": "admin@mail.com"
     }
 - USER
-- # body
+- $ body
      {
         "password": "New123",
         "email": "john@mail.com"
@@ -40,7 +40,7 @@ pnpm start
 
 # Purchases for Users
 - POST to http://localhost:5000/api/purchases/buy
-  # body
+  $ body
     {
     "bookId": 11,
     "quantity": 1
