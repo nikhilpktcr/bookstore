@@ -1,0 +1,11 @@
+{
+    "development": {
+      "username": "nkzyvdno",
+      "password": "rXWjOlzZD4XCKK0MgmycqEmz6Ijr_eUf",
+      "database": "nkzyvdno",
+      "host": "cornelius.db.elephantsql.com",
+      "dialect": "postgres",
+      "logging": true
+    }
+  }
+  
