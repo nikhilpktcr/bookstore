@@ -1,5 +1,7 @@
 import dotenv from 'dotenv';
+import { Op } from "sequelize"
 import dbmodels from "../../models/index.js";
+import { creatOrUpdateStock } from "../stocks/service.js"
 dotenv.config();
 
 
@@ -38,8 +40,13 @@ export const findAllBooks = async(queryParams) =>{
         let result = await dbmodels.sequelize.query(query, options);
         return result;
     }catch(error){
-        console.log(error);
-        throw new Error('Failed to fetch books');
+        console.log(error)
+        if(error.message){
+            throw new Error(error.message);
+        }else{
+            // Handling errors - sending a 404 status with an error message
+            throw new Error('failed to fetch books');
+        }
     }
 
 }
@@ -65,13 +72,17 @@ export const addBook = async (bodyParams)=>{
         }
         const bookData = await dbmodels.Books.create(createData);
         if(bodyParams.quantity){
-            await creatOrUpdateStock(parseInt(bodyParams.quantity), parseInt(bookId));
+            await creatOrUpdateStock(parseInt(bodyParams.quantity), parseInt(bookData.id));
         }
         let result = await getBookDetails(bookData.id);
         return result;
     }catch(error){
-        console.log(error);
-        throw new Error('user sign up failed');
+        console.log(error)
+        if(error.message){
+            throw new Error(error.message);
+        }else{
+            throw new Error('failed to add book');
+        }
     }
 };
 
@@ -82,6 +93,10 @@ export const updateBook = async(bodyParams, bookId)=>{
         bookData =  await dbmodels.Books.findByPk(parseInt(bookId));
         if(!bookData){
             throw new Error("Book not found")
+        }
+        const isBookExist = await dbmodels.Books.findOne({ where: { id: { [Op.not]: parseInt(bookId) }, name: bodyParams.name, author: bodyParams.author} });
+        if(isBookExist){
+            throw new Error('book already exists')
         }
         let updateData = {
             name: bodyParams.name,
@@ -98,8 +113,12 @@ export const updateBook = async(bodyParams, bookId)=>{
         let result = await getBookDetails(parseInt(bookId));
         return result;
     } catch (error) {
-        console.log(error);
-        throw new Error('update failed');
+        console.log(error)
+        if(error.message){
+            throw new Error(error.message);
+        }else{
+            throw new Error('update failed');
+        }
     }
 };
 
@@ -137,19 +156,4 @@ export const getBookDetails  = async(bookId) =>{
     }
     let result = await dbmodels.sequelize.query(query, options);
     return (result && result.length > 0) ? result[0]: null;
-}
-
-
-export const creatOrUpdateStock = async(bookQuantity, bookId)=>{
-    try {
-        let stockData =  await dbmodels.Stocks.findOne({ where : {book_id: parseInt(bookId)}});
-        if(!stockData){
-            await dbmodels.Stocks.create({quantity: bookQuantity, book_id: bookId});
-        }else{
-            await dbmodels.Stocks.update({quantity: bookQuantity}, { where: {book_id: parseInt(bookId)}});
-        }
-    } catch (error) {
-        console.log(error);
-        throw new Error('stock create update failed');
-    }
 }
