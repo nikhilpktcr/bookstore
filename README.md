@@ -1,6 +1,7 @@
 # bookstore
 
 # #Getting Started
+- Application uses pnpm manager so please install it globally: npm install pnpm -g
 - Please start the application using pnpm start:
 pnpm start
 
