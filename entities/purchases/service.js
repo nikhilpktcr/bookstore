@@ -29,8 +29,10 @@ export const buyBook = async(bodyParams)=>{
     } catch (error) {
         if(error.message){
             throw new Error(error.message);
+        }else{
+            throw new Error("Purchase failed");
         }
-        throw new Error("Purchase failed");
+
     }
 
 }
